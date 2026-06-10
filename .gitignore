@@ -1,0 +1,14 @@
+# Ocultar credenciales privadas
+config.json
+
+# Ocultar carpetas pesadas de Node.js
+**/node_modules/
+node_modules/
+
+# Ocultar temporales de Python
+**/__pycache__/
+__pycache__/
+*.pyc
+
+# Archivos del sistema
+.DS_Store

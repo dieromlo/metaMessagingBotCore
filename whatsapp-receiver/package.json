@@ -1,0 +1,18 @@
+{
+  "name": "whatsapp-receiver",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "tunnel": "lt --port 5000"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "express": "^5.2.1",
+    "localtunnel": "^2.0.2"
+  }
+}

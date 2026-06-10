@@ -1,0 +1,43 @@
+{
+  "serviciosHogar": {
+    "individual": {
+      "nombre": "Internet Individual 500 Megas",
+      "precio": "$84.900",
+      "promocion": "50% de descuento en la primera factura"
+    },
+    "duo": {
+      "nombre": "Dúo Internet 500 Megas + TV",
+      "descripcion": "500 megas de internet y dos pantallas de televisión",
+      "precio": "$107.000",
+      "promocion": "50% de descuento en la primera factura"
+    },
+    "trio": {
+      "nombre": "Trío Internet + TV + Telefonía Fija",
+      "descripcion": "500 megas de internet, dos pantallas de televisión y telefonía fija",
+      "precio": "$118.000",
+      "promocion": "Sujeto a tarifas vigentes"
+    }
+  },
+  "fullTigo": {
+    "duoFull": {
+      "nombre": "Dúo FullTigo 500 Megas + Celular",
+      "descripcion": "500 megas + plan celular ilimitado + aplicación de HBO",
+      "precio": "$98.900",
+      "promocion": "Beneficios de facturación unificada"
+    },
+    "trioFull": {
+      "nombre": "Trío FullTigo 500 Megas + TV + Celular",
+      "descripcion": "500 megas de internet + dos pantallas de televisión + plan celular ilimitado + canal WIN+ + aplicación de HBO",
+      "precio": "$119.900",
+      "promocion": "Ecosistema Tigo completo"
+    }
+  },
+  "soporte": {
+    "linkPago": "https://mi.tigo.com.co/pago-express/facturas?origin=web",
+    "centroAyuda": "ayuda.tigo.com.co",
+    "lineaMovil": "300",
+    "lineaFijaNacional": "018000422222",
+    "lineaFijaCorta": "118",
+    "lineaLocal": "604 4444141"
+  }
+}
