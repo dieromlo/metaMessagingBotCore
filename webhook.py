@@ -1,16 +1,14 @@
-from main import cargarConfiguracion
+from config import cargarConfiguracion
 from flask import Flask, request, jsonify
-import json
-import requests  # 🚀 Nueva librería para enviar la respuesta a Meta
+import requests
 from src.botBrain import procesarMensaje
 
 app = Flask(__name__)
 
-# 🔑 Configuración de Credenciales de Meta
 TOKEN_VERIFICACION = "RomeroDevGroupToken2026"
 
 def enviarMensajeWhatsApp(telefonoCliente, textoRespuesta):
-    config = cargarConfiguracion()  # necesitas importar esta función
+    config = cargarConfiguracion()
     if not config:
         print("❌ No se pudo cargar config.json")
         return
@@ -71,11 +69,9 @@ def recibirMensaje():
                 textoCliente = detallesMensaje["text"]["body"]
                 print(f"💬 El cliente [{numeroCliente}] escribió: {textoCliente}")
                 
-                # 🧠 Conectamos con el cerebro del bot
                 evaluacionBot = procesarMensaje(textoCliente)
                 print(f"🤖 El cerebro del bot decidió: {evaluacionBot['accion']}")
                 
-                # 📢 ¡NUEVO! Le ordenamos al bot hablar usando su nueva función de envío
                 enviarMensajeWhatsApp(numeroCliente, evaluacionBot['respuesta'])
                 
     except Exception as e:

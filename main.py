@@ -1,13 +1,5 @@
-import json
+from config import cargarConfiguracion
 import requests
-
-def cargarConfiguracion():
-    try:
-        with open("config.json", "r", encoding="utf-8") as archivoConfig:
-            return json.load(archivoConfig)
-    except FileNotFoundError:
-        print("❌ Error: No encontré config.json")
-        return None
 
 def enviarMensajePlantillaReal(numeroDestino):
     config = cargarConfiguracion()
@@ -21,7 +13,6 @@ def enviarMensajePlantillaReal(numeroDestino):
         "Content-Type": "application/json"
     }
     
-    # Estructura exacta calcada de tu panel de Meta
     cuerpoMensaje = {
         "messaging_product": "whatsapp",
         "to": numeroDestino,
@@ -35,18 +26,9 @@ def enviarMensajePlantillaReal(numeroDestino):
                 {
                     "type": "body",
                     "parameters": [
-                        {
-                            "type": "text",
-                            "text": "Juan Diego"
-                        },
-                        {
-                            "type": "text",
-                            "text": "987654"
-                        },
-                        {
-                            "type": "text",
-                            "text": "30 de Mayo, 2026"
-                        }
+                        {"type": "text", "text": "Juan Diego"},
+                        {"type": "text", "text": "987654"},
+                        {"type": "text", "text": "30 de Mayo, 2026"}
                     ]
                 }
             ]
