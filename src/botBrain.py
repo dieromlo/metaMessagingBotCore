@@ -1,4 +1,11 @@
 import json
+import unicodedata
+
+def normalizarTexto(texto):
+    texto = texto.strip().lower()
+    texto = unicodedata.normalize("NFD", texto)
+    texto = "".join(c for c in texto if unicodedata.category(c) != "Mn")
+    return texto
 
 def cargarPlanes():
     try:
@@ -9,7 +16,7 @@ def cargarPlanes():
 
 def procesarMensaje(textoCliente):
     datosPlanes = cargarPlanes()
-    mensajeLimpio = textoCliente.strip().lower()
+    mensajeLimpio = normalizarTexto(textoCliente)
     
     if mensajeLimpio in ["5", "delcy", "asesor", "humano", "persona"]:
         return {
@@ -27,7 +34,7 @@ def procesarMensaje(textoCliente):
             "respuesta": (
                 "¡Hola! Te saluda el Asistente Virtual de *Delcy Romero*, asesora experta de ventas de Tigo Colombia 🇨🇴.\n\n"
                 "Estoy aquí para darte información inmediata y agilizar tu proceso. "
-                "Por favor, responde únicamente con el **NÚMERO** de la opción que te interesa consultar:\n\n"
+                "Por favor, responde únicamente con el *NÚMERO* de la opción que te interesa consultar:\n\n"
                 "1️⃣ Combos FullTigo (Internet Hogar + Celular en una sola factura) 🚀\n"
                 "2️⃣ Planes de Internet o TV Individuales para la Casa 🏠\n"
                 "3️⃣ Requisitos para realizar mi instalación 📄\n"
@@ -39,78 +46,84 @@ def procesarMensaje(textoCliente):
     if mensajeLimpio == "1":
         duoFull = datosPlanes["fullTigo"]["duoFull"]
         trioFull = datosPlanes["fullTigo"]["trioFull"]
-        
-        textoFullTigo = (
-            "🚀 *Combos FullTigo disponibles para este mes:*\n\n"
-            f"📱 *{duoFull['nombre']}*\n"
-            f"• Incluye: {duoFull['descripcion']}\n"
-            f"• Precio: {duoFull['precio']}\n"
-            f"• Promo: {duoFull['promocion']}\n\n"
-            f"📺 *{trioFull['nombre']}*\n"
-            f"• Incluye: {trioFull['descripcion']}\n"
-            f"• Precio: {trioFull['precio']}\n"
-            f"• Promo: {trioFull['promocion']}\n\n"
-            "💬 Si quieres contratar alguno de estos combos, escribe la palabra *Contratar*.\n"
-            "🔙 Si deseas regresar al menú anterior, escribe *Inicio*."
-        )
-        return {"accion": "responder", "respuesta": textoFullTigo}
+        return {
+            "accion": "responder",
+            "respuesta": (
+                "🚀 *Combos FullTigo disponibles para este mes:*\n\n"
+                f"📱 *{duoFull['nombre']}*\n"
+                f"• Incluye: {duoFull['descripcion']}\n"
+                f"• Precio: {duoFull['precio']}\n"
+                f"• Promo: {duoFull['promocion']}\n\n"
+                f"📺 *{trioFull['nombre']}*\n"
+                f"• Incluye: {trioFull['descripcion']}\n"
+                f"• Precio: {trioFull['precio']}\n"
+                f"• Promo: {trioFull['promocion']}\n\n"
+                "💬 Si quieres contratar alguno, escribe *Contratar*.\n"
+                "🔙 Para regresar al menú escribe *Inicio*."
+            )
+        }
 
     elif mensajeLimpio == "2":
         hogarIndividual = datosPlanes["serviciosHogar"]["individual"]
         hogarDuo = datosPlanes["serviciosHogar"]["duo"]
         hogarTrio = datosPlanes["serviciosHogar"]["trio"]
-        
-        textoHogar = (
-            "🏠 *Planes de Internet Residencial disponibles:*\n\n"
-            f"🌐 *{hogarIndividual['nombre']}*\n"
-            f"• Precio: {hogarIndividual['precio']}\n"
-            f"• Promo: {hogarIndividual['promocion']}\n\n"
-            f"👥 *{hogarDuo['nombre']}*\n"
-            f"• Incluye: {hogarDuo['descripcion']}\n"
-            f"• Precio: {hogarDuo['precio']}\n"
-            f"• Promo: {hogarDuo['promocion']}\n\n"
-            f"🏢 *{hogarTrio['nombre']}*\n"
-            f"• Incluye: {hogarTrio['descripcion']}\n"
-            f"• Precio: {hogarTrio['precio']}\n\n"
-            "💬 Si quieres adquirir alguno de estos planes, escribe la palabra *Contratar*.\n"
-            "🔙 Si deseas regresar al menú anterior, escribe *Inicio*."
-        )
-        return {"accion": "responder", "respuesta": textoHogar}
+        return {
+            "accion": "responder",
+            "respuesta": (
+                "🏠 *Planes de Internet Residencial disponibles:*\n\n"
+                f"🌐 *{hogarIndividual['nombre']}*\n"
+                f"• Precio: {hogarIndividual['precio']}\n"
+                f"• Promo: {hogarIndividual['promocion']}\n\n"
+                f"👥 *{hogarDuo['nombre']}*\n"
+                f"• Incluye: {hogarDuo['descripcion']}\n"
+                f"• Precio: {hogarDuo['precio']}\n"
+                f"• Promo: {hogarDuo['promocion']}\n\n"
+                f"🏢 *{hogarTrio['nombre']}*\n"
+                f"• Incluye: {hogarTrio['descripcion']}\n"
+                f"• Precio: {hogarTrio['precio']}\n\n"
+                "💬 Si quieres adquirir alguno, escribe *Contratar*.\n"
+                "🔙 Para regresar al menú escribe *Inicio*."
+            )
+        }
 
-    elif mensajeLimpio == "3" or mensajeLimpio == "contratar":
-        textoRequisitos = (
-            "📄 *Datos necesarios para tu instalación:*\n\n"
-            "Para agendar la instalación (la cual toma un tiempo estimado de 48 horas hábiles), "
-            "necesitamos validar tus datos de forma rápida y segura. Por favor envíanos:\n\n"
-            "1. Foto de tu cédula colombiana o PPT por ambos lados.\n"
-            "2. Una foto tuya sosteniendo la cédula o PPT (de los hombros hacia arriba).\n"
-            "3. Tu correo electrónico activo.\n"
-            "4. Dirección exacta completa (o foto de la factura de EPM o PIN si haces recarga de luz).\n"
-            "5. Números de contacto: Un número principal y uno adicional.\n\n"
-            "⚠️ *Nota:* En un momento te enviaremos una imagen guía detallada. "
-            "Apenas envíes los datos, la asesora *Delcy Romero* tomará el control para ingresar tu solicitud al sistema."
-        )
-        return {"accion": "enviarTextoEImagen", "respuesta": textoRequisitos}
+    elif mensajeLimpio in ["3", "contratar"]:
+        return {
+            "accion": "enviarTextoEImagen",
+            "respuesta": (
+                "📄 *Datos necesarios para tu instalación:*\n\n"
+                "Para agendar la instalación (48 horas hábiles aprox.), necesitamos:\n\n"
+                "1. Foto de tu cédula colombiana o PPT por ambos lados.\n"
+                "2. Foto tuya sosteniendo la cédula (hombros hacia arriba).\n"
+                "3. Tu correo electrónico activo.\n"
+                "4. Dirección exacta completa (o foto de factura EPM o PIN de recarga).\n"
+                "5. Un número principal y uno adicional de contacto.\n\n"
+                "⚠️ *Nota:* En un momento te enviamos una imagen guía. "
+                "La asesora *Delcy Romero* tomará el control para ingresar tu solicitud."
+            )
+        }
 
-    # 🛠️ Opción 4 actualizada con el texto oficial de tu mamá
     elif mensajeLimpio == "4":
         datosSoporte = datosPlanes["soporte"]
-        textoSoporte = (
-            f"💳 *Facturación y Soporte Técnico Tigo:*\n\n"
-            f"Recuerda que, en nuestro Centro de Ayuda *{datosSoporte['centroAyuda']}* puede estar la información que necesitas 😊\n\n"
-            f"*Si necesitas soporte técnico para tu hogar 🏠, te invitamos a llamar a nuestra Línea de Servicio al:*\n"
-            f"- *{datosSoporte['lineaMovil']}* desde móviles Tigo\n"
-            f"- *{datosSoporte['lineaFijaNacional']}* o *{datosSoporte['lineaFijaCorta']}* desde fijas Tigo\n"
-            f"- *{datosSoporte['lineaLocal']}* desde fijos o móviles\n\n"
-            f"🔒 *Para pagos seguros de facturas:* {datosSoporte['linkPago']}\n\n"
-            f"🔙 Si deseas regresar al menú, escribe *Inicio*."
-        )
-        return {"accion": "responder", "respuesta": textoSoporte}
+        return {
+            "accion": "responder",
+            "respuesta": (
+                f"💳 *Facturación y Soporte Técnico Tigo:*\n\n"
+                f"En nuestro Centro de Ayuda *{datosSoporte['centroAyuda']}* puede estar la info que necesitas 😊\n\n"
+                f"*Soporte técnico para tu hogar 🏠:*\n"
+                f"- *{datosSoporte['lineaMovil']}* desde móviles Tigo\n"
+                f"- *{datosSoporte['lineaFijaNacional']}* o *{datosSoporte['lineaFijaCorta']}* desde fijas Tigo\n"
+                f"- *{datosSoporte['lineaLocal']}* desde fijos o móviles\n\n"
+                f"🔒 *Pagos seguros:* {datosSoporte['linkPago']}\n\n"
+                "🔙 Para regresar al menú escribe *Inicio*."
+            )
+        }
 
     else:
-        textoError = (
-            "❌ *Opción no válida.*\n\n"
-            "Por favor, escribe únicamente el **NÚMERO** de la opción correspondiente (1 al 5) "
-            "O escribe *Delcy* si deseas atención humana inmediata."
-        )
-        return {"accion": "error", "respuesta": textoError}
+        return {
+            "accion": "error",
+            "respuesta": (
+                "❌ *Opción no válida.*\n\n"
+                "Escribe únicamente el *NÚMERO* de la opción (1 al 5) "
+                "o escribe *Delcy* para atención humana inmediata."
+            )
+        }
